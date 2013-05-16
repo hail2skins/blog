@@ -16,10 +16,12 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
+    @address = @article.build_address(params[:address])
   end
 
   # GET /articles/1/edit
   def edit
+    @address = @article.address ||= @article.build_address(params[:address])  
   end
 
   # POST /articles
@@ -70,6 +72,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:name, :content)
+      params.require(:article).permit(:name, :content, :address_attributes => [:line1, :line2, :city, :state, :zip])
     end
 end
