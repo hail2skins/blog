@@ -16,12 +16,12 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   def new
     @article = Article.new
-    @address = @article.build_address(params[:address])
+    @article.build_address(params[:address])
   end
 
   # GET /articles/1/edit
   def edit
-    @address = @article.address ||= @article.build_address(params[:address])  
+    @article.address ||= @article.build_address
   end
 
   # POST /articles
@@ -43,6 +43,7 @@ class ArticlesController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
+    @article.address.update(params[:address])
     respond_to do |format|
       if @article.update(article_params)
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
@@ -72,6 +73,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:name, :content, :address_attributes => [:line1, :line2, :city, :state, :zip])
+      params.require(:article).permit(:name, :content, :address_attributes => [:id, :line1, :line2, :city, :state, :zip])
     end
 end
